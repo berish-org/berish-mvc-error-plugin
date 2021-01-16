@@ -1,7 +1,4 @@
-export function catchFunction(
-  func: Function,
-  onError?: (err: Error) => any
-): (...args: any[]) => any {
+export function catchFunction(func: Function, onError?: (err: Error) => any): (...args: any[]) => any {
   return function (...args: any[]) {
     try {
       const result = func(...args);

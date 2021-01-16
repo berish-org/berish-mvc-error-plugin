@@ -1,15 +1,15 @@
-import LINQ from "@berish/linq";
+import LINQ from '@berish/linq';
 
 export function getKeys(obj: any) {
   try {
     const dontEnums = [
-      "toString",
-      "toLocaleString",
-      "valueOf",
-      "hasOwnProperty",
-      "isPrototypeOf",
-      "propertyIsEnumerable",
-      "constructor",
+      'toString',
+      'toLocaleString',
+      'valueOf',
+      'hasOwnProperty',
+      'isPrototypeOf',
+      'propertyIsEnumerable',
+      'constructor',
     ];
     let props: LINQ<string> = LINQ.from();
 
