@@ -15,7 +15,7 @@ export interface PluginParams {
 const defaultParams: PluginParams = {
   getUnhandledErrorController: () => withController((props) => <>{JSON.stringify(props.error)}</>),
   getErrorName: (error) => {
-    if (error && 'name' in error) return error.name;
+    if (error && typeof error === 'object' && 'name' in error) return error.name;
     return error;
   },
   selectErrorController: (controllers) => controllers[0],
