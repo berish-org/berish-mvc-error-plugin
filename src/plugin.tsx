@@ -1,10 +1,11 @@
-import { createStateful } from '@berish/stateful';
-import { connect } from '@berish/stateful-react-connect';
 import { ControllerClass, LifecyclePlugin } from '@berish/mvc-core';
 
-import { getErrorControllers, getErrorRenderView, upgradeComponent } from './methods';
-import { SYMBOL_ERROR_STATEFUL } from './const';
+import { getErrorControllers, upgradeComponent } from './methods';
+import { SYMBOL_ERROR_STORE } from './const';
 import { PluginParams, getDefaultParams } from './params';
+import { ErrorRenderViewConnected } from './ErrorRenderView';
+import React from 'react';
+import { makeAutoObservable } from 'mobx';
 
 export interface ErrorPlugin {
   (params: PluginParams): LifecyclePlugin;
@@ -17,6 +18,7 @@ export interface ErrorStore {
 
 export interface ErrorControllerProps {
   error: any;
+  undo: () => void;
 }
 
 export const plugin: ErrorPlugin = (params) => {
@@ -34,31 +36,27 @@ export const plugin: ErrorPlugin = (params) => {
           const errorController =
             errorControllers.length > 0 ? selectErrorController(errorControllers) : unhandledErrorController;
 
-          controllerInstance[SYMBOL_ERROR_STATEFUL].errorController = errorController;
-          controllerInstance[SYMBOL_ERROR_STATEFUL].error = error;
+          controllerInstance[SYMBOL_ERROR_STORE].errorController = errorController;
+          controllerInstance[SYMBOL_ERROR_STORE].error = error;
         };
       },
     },
     upgradeRenderConfig: (renderConfig) => {
       const prevOnBeforeInitialize = renderConfig.onBeforeInitialize;
-      const prevConnectRenderView = renderConfig.connectRenderView;
+      const prevRenderComponent = renderConfig.renderComponent;
 
       renderConfig.onBeforeInitialize = (component) => {
         if (prevOnBeforeInitialize) prevOnBeforeInitialize(component);
 
-        component.controller[SYMBOL_ERROR_STATEFUL] = createStateful({
+        component.controller[SYMBOL_ERROR_STORE] = makeAutoObservable({
           error: null,
           errorController: null,
         });
-
         upgradeComponent(component);
       };
 
-      renderConfig.connectRenderView = (component, models, renderView) => {
-        return connect(
-          [component.controller[SYMBOL_ERROR_STATEFUL]],
-          getErrorRenderView(component.controller, prevConnectRenderView(component, models, renderView)),
-        );
+      renderConfig.renderComponent = (component, props) => {
+        return <ErrorRenderViewConnected>{prevRenderComponent(component, props)}</ErrorRenderViewConnected>;
       };
     },
   };

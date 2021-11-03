@@ -1,2 +1,2 @@
-export const SYMBOL_ERROR_STATEFUL = Symbol('mvc errorPlugin errorStateful');
-export const SYMBOL_ERROR_NAMES = Symbol('mvc errorPlugin errorNames');
+export const SYMBOL_ERROR_STORE = Symbol('SYMBOL_ERROR_STORE');
+export const SYMBOL_ERROR_NAMES = Symbol('SYMBOL_ERROR_NAMES');

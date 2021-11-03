@@ -20,6 +20,4 @@ function upgradeInstance<TLifecycleInitializeSteps extends LifecycleInitializeSt
 
 export function upgradeComponent(component: MvcComponent) {
   if (component.controller) upgradeInstance(component.controller, ['catchError'], component.controller.catchError);
-  if (component.model) upgradeInstance(component.model, [], component.controller.catchError);
-  if (component.view) upgradeInstance(component.view, ['render', 'forceUpdate'], component.controller.catchError);
 }
