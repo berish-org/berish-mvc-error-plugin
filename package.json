@@ -1,6 +1,6 @@
 {
   "name": "@berish/mvc-error-plugin",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Error plugin for @berish/mvc-core",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
